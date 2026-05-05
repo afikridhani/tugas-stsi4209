@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informasi Bahan Ajar - SITTA Universitas Terbuka</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" aria-label="Menu Utama">
+    <div class="navbar-container">
+      <div class="navbar-brand">
+        <div class="brand-icon">UT</div>
+        <span>SITTA</span>
+      </div>
+
+      <ul class="navbar-menu">
+        <li><a href="dashboard.html">🏠 Dashboard</a></li>
+        <li><a href="stok.html" class="active">📚 Informasi Bahan Ajar</a></li>
+        <li><a href="tracking.html">🚚 Tracking Pengiriman</a></li>
+        <li>
+          <a class="dropdown-toggle">📊 Laporan</a>
+          <ul class="dropdown-menu">
+            <li><a onclick="alert('Silakan akses dari halaman Dashboard')">📈 Monitoring Progress DO</a></li>
+            <li><a onclick="alert('Silakan akses dari halaman Dashboard')">📋 Rekap Bahan Ajar</a></li>
+          </ul>
+        </li>
+        <li><a onclick="alert('Silakan akses dari halaman Dashboard')">📜 Histori Transaksi</a></li>
+      </ul>
+
+      <div class="navbar-user">
+        <div class="user-avatar" id="avatarUser">U</div>
+        <span id="namaUser">User</span>
+        <button class="btn-logout" onclick="logout()">Keluar</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- KONTEN UTAMA -->
+  <main class="main-content">
+
+    <!-- Page Header -->
+    <header class="page-header">
+      <h1>📚 Informasi Stok Bahan Ajar</h1>
+      <p>Daftar lengkap stok bahan ajar yang tersedia di gudang Universitas Terbuka</p>
+    </header>
+
+    <!-- Statistik -->
+    <section class="stats-grid" aria-label="Statistik Stok">
+      <article class="stat-card">
+        <div class="stat-label">Total Item</div>
+        <div class="stat-value" id="statTotalItem">0</div>
+      </article>
+      <article class="stat-card stat-yellow">
+        <div class="stat-label">Total Stok</div>
+        <div class="stat-value" id="statTotalStok">0</div>
+      </article>
+      <article class="stat-card stat-red">
+        <div class="stat-label">Stok Menipis</div>
+        <div class="stat-value" id="statKritis">0</div>
+      </article>
+      <article class="stat-card stat-green">
+        <div class="stat-label">Jenis Bahan Ajar</div>
+        <div class="stat-value" id="statJenis">0</div>
+      </article>
+    </section>
+
+    <!-- Toolbar (Search + Tombol Tambah) -->
+    <div class="toolbar">
+      <div>
+        <input
+          type="text"
+          id="searchStok"
+          class="search-input"
+          placeholder="🔍 Cari kode, nama, atau jenis bahan ajar..."
+          onkeyup="cariStok()">
+        <span style="margin-left: 12px; font-size: 13px; color: #6c757d;">
+          Menampilkan <strong id="totalData">0</strong> item
+        </span>
+      </div>
+      <button class="btn btn-primary" style="width: auto;" onclick="bukaModal('modalTambahStok')">
+        ➕ Tambah Bahan Ajar
+      </button>
+    </div>
+
+    <!-- Tabel Stok -->
+    <section class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Kode Lokasi</th>
+            <th>Kode Barang</th>
+            <th>Nama Bahan Ajar</th>
+            <th>Jenis</th>
+            <th>Edisi</th>
+            <th>Stok</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyStok">
+          <!-- Data diisi secara dinamis oleh JavaScript -->
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- ============================================ -->
+  <!-- MODAL: TAMBAH BAHAN AJAR                     -->
+  <!-- ============================================ -->
+  <div id="modalTambahStok" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>➕ Tambah Bahan Ajar Baru</h2>
+        <button class="modal-close" onclick="tutupModal('modalTambahStok')">&times;</button>
+      </div>
+
+      <p style="margin-bottom: 20px; color: #6c757d; font-size: 14px;">
+        Lengkapi form berikut untuk menambahkan data bahan ajar baru ke dalam sistem.
+      </p>
+
+      <form id="formTambahStok" onsubmit="return tambahStokBaru(event)" novalidate>
+        <div class="form-group no-icon">
+          <label for="kodeLokasi">Kode Lokasi *</label>
+          <input
+            type="text"
+            id="kodeLokasi"
+            name="kodeLokasi"
+            placeholder="Contoh: OTMP01"
+            maxlength="10"
+            required>
+        </div>
+
+        <div class="form-group no-icon">
+          <label for="kodeBarang">Kode Barang *</label>
+          <input
+            type="text"
+            id="kodeBarang"
+            name="kodeBarang"
+            placeholder="Contoh: ASIP4301"
+            maxlength="15"
+            required>
+        </div>
+
+        <div class="form-group no-icon">
+          <label for="namaBarang">Nama Bahan Ajar *</label>
+          <input
+            type="text"
+            id="namaBarang"
+            name="namaBarang"
+            placeholder="Contoh: Pengantar Ilmu Komunikasi"
+            required>
+        </div>
+
+        <div class="form-group no-icon">
+          <label for="jenisBarang">Jenis Bahan Ajar *</label>
+          <select id="jenisBarang" name="jenisBarang" required>
+            <option value="">-- Pilih Jenis --</option>
+            <option value="BMP">BMP (Buku Materi Pokok)</option>
+            <option value="Modul">Modul</option>
+            <option value="CD">CD Pembelajaran</option>
+            <option value="Multimedia">Multimedia Interaktif</option>
+            <option value="Suplemen">Suplemen</option>
+          </select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group no-icon">
+            <label for="edisi">Edisi *</label>
+            <input
+              type="number"
+              id="edisi"
+              name="edisi"
+              placeholder="1"
+              min="1"
+              max="20"
+              required>
+          </div>
+
+          <div class="form-group no-icon">
+            <label for="stok">Stok Awal *</label>
+            <input
+              type="number"
+              id="stok"
+              name="stok"
+              placeholder="0"
+              min="0"
+              required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="tutupModal('modalTambahStok')">Batal</button>
+          <button type="submit" class="btn btn-primary" style="width:auto; padding: 10px 24px;">
+            ✓ Simpan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="text-align: center; padding: 24px; color: #6c757d; font-size: 13px;">
+    © 2025 Universitas Terbuka - SITTA v1.0
+  </footer>
+
+  <!-- External JS -->
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", inisialisasiStok);
+  </script>
+</body>
+</html>

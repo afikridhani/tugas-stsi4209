@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SITTA - Sistem Informasi Tiras dan Transaksi Bahan Ajar Universitas Terbuka">
+  <meta name="author" content="Universitas Terbuka">
+  <title>Login - SITTA Universitas Terbuka</title>
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google Fonts (Poppins & Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Internal CSS - contoh implementasi internal CSS -->
+  <style>
+    /* Internal CSS untuk styling spesifik halaman login */
+    .login-footer {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--ut-gray-100);
+      font-size: 12px;
+      color: var(--ut-gray-600);
+    }
+  </style>
+</head>
+<body class="login-page">
+
+  <!-- Container utama login -->
+  <main class="login-container">
+    <!-- Header / Logo -->
+    <header class="login-logo">
+      <div class="logo-circle">UT</div>
+      <h1>SITTA</h1>
+      <p>Sistem Informasi Tiras dan Transaksi Bahan Ajar</p>
+    </header>
+
+    <h2 class="welcome-text">Selamat Datang</h2>
+
+    <!-- Alert error placeholder -->
+    <div id="loginError" class="alert alert-error" style="display:none;" role="alert"></div>
+
+    <!-- Form Login -->
+    <form id="formLogin" onsubmit="return prosesLogin(event)" novalidate>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <span class="input-icon">✉</span>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="contoh@ut.ac.id"
+          autocomplete="email"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <span class="input-icon">🔒</span>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Masukkan password Anda"
+          autocomplete="current-password"
+          required>
+      </div>
+
+      <!-- Tombol Lupa Password -->
+      <div class="login-options">
+        <span style="color: #6c757d; font-size: 13px;">Pengguna UT-Daerah</span>
+        <a onclick="bukaModal('modalLupaPassword')">Lupa Password?</a>
+      </div>
+
+      <!-- Tombol Login -->
+      <button type="submit" class="btn btn-primary">Masuk</button>
+
+      <!-- Link Daftar -->
+      <p class="register-link">
+        Belum punya akun? <a onclick="bukaModal('modalDaftar')">Daftar Sekarang</a>
+      </p>
+    </form>
+
+    <!-- Hint demo (untuk memudahkan testing) -->
+    <div class="login-footer">
+      <strong>Akun Demo:</strong> admin@ut.ac.id / admin123<br>
+      © 2025 Universitas Terbuka
+    </div>
+  </main>
+
+  <!-- ============================================ -->
+  <!-- MODAL: LUPA PASSWORD                          -->
+  <!-- ============================================ -->
+  <div id="modalLupaPassword" class="modal-overlay" role="dialog" aria-labelledby="judulLupa">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="judulLupa">🔑 Lupa Password</h2>
+        <button class="modal-close" onclick="tutupModal('modalLupaPassword')" aria-label="Tutup">&times;</button>
+      </div>
+
+      <p style="margin-bottom: 18px; color: #6c757d; font-size: 14px;">
+        Masukkan email Anda yang terdaftar. Kami akan mengirimkan tautan untuk reset password.
+      </p>
+
+      <form id="formLupaPassword" onsubmit="return prosesLupaPassword(event)" novalidate>
+        <div class="form-group no-icon">
+          <label for="emailLupa">Email Terdaftar</label>
+          <input
+            type="email"
+            id="emailLupa"
+            name="emailLupa"
+            placeholder="email@ut.ac.id"
+            required>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="tutupModal('modalLupaPassword')">Batal</button>
+          <button type="submit" class="btn btn-primary" style="width:auto; padding: 10px 24px;">Kirim Link Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- MODAL: DAFTAR / REGISTRASI                    -->
+  <!-- ============================================ -->
+  <div id="modalDaftar" class="modal-overlay" role="dialog" aria-labelledby="judulDaftar">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="judulDaftar">📝 Daftar Akun Baru</h2>
+        <button class="modal-close" onclick="tutupModal('modalDaftar')" aria-label="Tutup">&times;</button>
+      </div>
+
+      <p style="margin-bottom: 18px; color: #6c757d; font-size: 14px;">
+        Silakan lengkapi data berikut untuk mendaftar sebagai pengguna SITTA.
+      </p>
+
+      <form id="formDaftar" onsubmit="return prosesDaftar(event)" novalidate>
+        <div class="form-group no-icon">
+          <label for="namaDaftar">Nama Lengkap UT-Daerah</label>
+          <input
+            type="text"
+            id="namaDaftar"
+            name="namaDaftar"
+            placeholder="Contoh: UT-Daerah Jakarta"
+            required>
+        </div>
+
+        <div class="form-group no-icon">
+          <label for="emailDaftar">Email</label>
+          <input
+            type="email"
+            id="emailDaftar"
+            name="emailDaftar"
+            placeholder="email@ut.ac.id"
+            required>
+        </div>
+
+        <div class="form-group no-icon">
+          <label for="passwordDaftar">Password</label>
+          <input
+            type="password"
+            id="passwordDaftar"
+            name="passwordDaftar"
+            placeholder="Minimal 6 karakter"
+            minlength="6"
+            required>
+        </div>
+
+        <div class="form-group no-icon">
+          <label for="konfirmasiPassword">Konfirmasi Password</label>
+          <input
+            type="password"
+            id="konfirmasiPassword"
+            name="konfirmasiPassword"
+            placeholder="Ulangi password Anda"
+            minlength="6"
+            required>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="tutupModal('modalDaftar')">Batal</button>
+          <button type="submit" class="btn btn-primary" style="width:auto; padding: 10px 24px;">Daftar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- External JS -->
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+
+  <!-- Inline JS - contoh implementasi inline JavaScript -->
+  <script>
+    // Inline JS: Auto-focus ke input email saat halaman dimuat
+    window.addEventListener("load", function() {
+      document.getElementById("email").focus();
+    });
+  </script>
+</body>
+</html>

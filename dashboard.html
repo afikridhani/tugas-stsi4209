@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - SITTA Universitas Terbuka</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ============================================ -->
+  <!-- NAVBAR DENGAN MENU NAVIGASI                  -->
+  <!-- ============================================ -->
+  <nav class="navbar" aria-label="Menu Utama">
+    <div class="navbar-container">
+      <div class="navbar-brand">
+        <div class="brand-icon">UT</div>
+        <span>SITTA</span>
+      </div>
+
+      <ul class="navbar-menu" role="menubar">
+        <li role="none">
+          <a href="dashboard.html" class="active" role="menuitem">🏠 Dashboard</a>
+        </li>
+        <li role="none">
+          <a href="stok.html" role="menuitem">📚 Informasi Bahan Ajar</a>
+        </li>
+        <li role="none">
+          <a href="tracking.html" role="menuitem">🚚 Tracking Pengiriman</a>
+        </li>
+        <li role="none">
+          <a class="dropdown-toggle" role="menuitem" aria-haspopup="true">📊 Laporan</a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a onclick="tampilkanLaporan('monitoring')">📈 Monitoring Progress DO</a></li>
+            <li><a onclick="tampilkanLaporan('rekap')">📋 Rekap Bahan Ajar</a></li>
+          </ul>
+        </li>
+        <li role="none">
+          <a onclick="tampilkanLaporan('histori')" role="menuitem">📜 Histori Transaksi</a>
+        </li>
+      </ul>
+
+      <div class="navbar-user">
+        <div class="user-avatar" id="avatarUser">U</div>
+        <span id="namaUser">User</span>
+        <button class="btn-logout" onclick="logout()">Keluar</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================ -->
+  <!-- KONTEN UTAMA DASHBOARD                       -->
+  <!-- ============================================ -->
+  <main class="main-content">
+
+    <!-- Greeting Banner -->
+    <section class="greeting-banner">
+      <h2><span id="greetingTime" class="greeting-time">Selamat Pagi</span>, Selamat Datang!</h2>
+      <p>Dashboard Aplikasi SITTA - Sistem Informasi Tiras dan Transaksi Bahan Ajar</p>
+      <p id="greetingFull" style="margin-top: 6px; font-size: 13px; opacity: 0.85;"></p>
+    </section>
+
+    <!-- Statistik Ringkas -->
+    <section class="stats-grid" aria-label="Statistik Ringkas">
+      <article class="stat-card">
+        <div class="stat-label">Total Bahan Ajar</div>
+        <div class="stat-value" id="statBahanAjar">0</div>
+      </article>
+      <article class="stat-card stat-yellow">
+        <div class="stat-label">Total Stok</div>
+        <div class="stat-value" id="statStok">0</div>
+      </article>
+      <article class="stat-card stat-green">
+        <div class="stat-label">DO Aktif</div>
+        <div class="stat-value" id="statDO">0</div>
+      </article>
+      <article class="stat-card stat-red">
+        <div class="stat-label">Transaksi Bulan Ini</div>
+        <div class="stat-value" id="statTransaksi">0</div>
+      </article>
+    </section>
+
+    <!-- Header Section Menu -->
+    <header class="page-header">
+      <h1>Menu Utama</h1>
+      <p>Pilih menu di bawah untuk mengakses fitur-fitur SITTA</p>
+    </header>
+
+    <!-- Menu Grid -->
+    <section class="menu-grid" aria-label="Menu Aplikasi">
+      <a href="stok.html" class="menu-card">
+        <div class="card-icon">📚</div>
+        <h3>Informasi Bahan Ajar</h3>
+        <p>Lihat dan kelola data stok bahan ajar yang tersedia di gudang UT</p>
+      </a>
+
+      <a href="tracking.html" class="menu-card card-yellow">
+        <div class="card-icon">🚚</div>
+        <h3>Tracking Pengiriman</h3>
+        <p>Lacak status pengiriman bahan ajar berdasarkan nomor Delivery Order</p>
+      </a>
+
+      <a class="menu-card card-green" onclick="tampilkanLaporan('monitoring')">
+        <div class="card-icon">📈</div>
+        <h3>Monitoring Progress DO</h3>
+        <p>Pantau progres Delivery Order bahan ajar secara real-time</p>
+      </a>
+
+      <a class="menu-card card-purple" onclick="tampilkanLaporan('rekap')">
+        <div class="card-icon">📋</div>
+        <h3>Rekap Bahan Ajar</h3>
+        <p>Lihat rekap data bahan ajar berdasarkan kode dan stok terbaru</p>
+      </a>
+
+      <a class="menu-card" onclick="tampilkanLaporan('histori')" style="border-left: 4px solid var(--ut-info);">
+        <div class="card-icon" style="background: linear-gradient(135deg, var(--ut-info) 0%, #117a8b 100%);">📜</div>
+        <h3>Histori Transaksi Bahan Ajar</h3>
+        <p>Riwayat transaksi pemesanan bahan ajar yang telah dilakukan UT-Daerah</p>
+      </a>
+
+      <a class="menu-card card-yellow" onclick="alert('Fitur ini akan segera tersedia')">
+        <div class="card-icon">⚙</div>
+        <h3>Pengaturan</h3>
+        <p>Kelola profil dan preferensi akun UT-Daerah Anda</p>
+      </a>
+    </section>
+  </main>
+
+  <!-- ============================================ -->
+  <!-- MODAL: MONITORING PROGRESS DO                -->
+  <!-- ============================================ -->
+  <div id="modalMonitoring" class="modal-overlay">
+    <div class="modal-content" style="max-width: 900px;">
+      <div class="modal-header">
+        <h2>📈 Monitoring Progress DO Bahan Ajar</h2>
+        <button class="modal-close" onclick="tutupModal('modalMonitoring')">&times;</button>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>No DO</th>
+              <th>Tanggal DO</th>
+              <th>Total Item</th>
+              <th>Terkirim</th>
+              <th>Progress</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyMonitoring"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- MODAL: REKAP BAHAN AJAR                      -->
+  <!-- ============================================ -->
+  <div id="modalRekap" class="modal-overlay">
+    <div class="modal-content" style="max-width: 900px;">
+      <div class="modal-header">
+        <h2>📋 Rekap Bahan Ajar</h2>
+        <button class="modal-close" onclick="tutupModal('modalRekap')">&times;</button>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Kode Barang</th>
+              <th>Nama Bahan Ajar</th>
+              <th>Jenis</th>
+              <th>Edisi</th>
+              <th>Stok</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyRekap"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- MODAL: HISTORI TRANSAKSI                     -->
+  <!-- ============================================ -->
+  <div id="modalHistori" class="modal-overlay">
+    <div class="modal-content" style="max-width: 1000px;">
+      <div class="modal-header">
+        <h2>📜 Histori Transaksi Bahan Ajar</h2>
+        <button class="modal-close" onclick="tutupModal('modalHistori')">&times;</button>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>No DO</th>
+              <th>Mahasiswa</th>
+              <th>Jumlah</th>
+              <th>Total</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyHistori"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="text-align: center; padding: 24px; color: #6c757d; font-size: 13px;">
+    © 2025 Universitas Terbuka - SITTA v1.0 | Tugas Praktik 1 STSI4209 Pemrograman Berbasis Web
+  </footer>
+
+  <!-- External JS -->
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    // Inisialisasi halaman dashboard saat DOM siap
+    document.addEventListener("DOMContentLoaded", inisialisasiDashboard);
+  </script>
+</body>
+</html>
